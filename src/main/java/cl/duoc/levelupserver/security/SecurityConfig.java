@@ -22,7 +22,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-    // (Spring detectará automáticamente el UserDetailsServiceImpl sin necesidad de declararlo aquí explícitamente para el Provider)
 
     public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
@@ -34,7 +33,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/api/products/**").permitAll() 
+                .requestMatchers("/auth/**", "/api/products/**", "/api/messages/**").permitAll() 
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
             )
@@ -46,7 +45,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Usamos NoOp para simplificar (texto plano), en producción usa BCrypt
         return NoOpPasswordEncoder.getInstance();
     }
 
