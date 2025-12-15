@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface BoletaRepository extends JpaRepository<Boleta, Long> {
-    // Buscar todas las boletas de un usuario por su email, ordenadas por fecha (más reciente primero)
     List<Boleta> findByUsuarioEmailOrderByFechaDesc(String email);
 }
