@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders") // Ruta base para todos
+@RequestMapping("/api/orders") 
 @CrossOrigin(origins = "*")
 public class OrderController {
 
@@ -26,7 +26,7 @@ public class OrderController {
     @Autowired
     private BoletaRepository boletaRepository;
 
-    // 1. CREAR PEDIDO (POST /api/orders)
+    // 1. CREAR PEDIDO 
     @PostMapping
     public ResponseEntity<?> crearPedido(
             @RequestHeader("Authorization") String tokenHeader,
@@ -44,20 +44,18 @@ public class OrderController {
         }
     }
 
-    // 2. VER TODOS LOS PEDIDOS (GET /api/orders) - Para el ADMIN
+    // 2. VER  PEDIDOs ADMIN
     @GetMapping
     public ResponseEntity<List<Boleta>> listarTodas() {
-        // En un caso real, aquí validarías que el usuario sea Admin
         return ResponseEntity.ok(boletaRepository.findAll());
     }
 
-    // 3. VER MIS PEDIDOS (GET /api/orders/my-orders) - Para el CLIENTE
+    // 3. ver PEDIDOS  CLIENTE
     @GetMapping("/my-orders")
     public ResponseEntity<List<Boleta>> misPedidos(@RequestHeader("Authorization") String tokenHeader) {
         try {
             String token = tokenHeader.substring(7);
             String email = jwtUtil.extractUsername(token);
-            // Buscamos solo las de este usuario
             List<Boleta> boletas = boletaRepository.findByUsuarioEmailOrderByFechaDesc(email);
             return ResponseEntity.ok(boletas);
         } catch (Exception e) {

@@ -17,13 +17,11 @@ public class DetalleBoleta {
     private Integer cantidad;
     private Integer precioUnitario;
 
-    // Relación inversa: Pertenece a una boleta
     @ManyToOne
     @JoinColumn(name = "boleta_id")
-    @JsonIgnore // <--- 2. AGREGA ESTA ANOTACIÓN MÁGICA
+    @JsonIgnore 
     private Boleta boleta;
 
-    // Relación: Apunta a un producto específico
     @ManyToOne
     @JoinColumn(name = "producto_id")
     private Producto producto;

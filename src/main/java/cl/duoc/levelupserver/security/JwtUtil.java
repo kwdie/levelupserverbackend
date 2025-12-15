@@ -18,22 +18,20 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Leemos la configuración desde application.properties
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    // Generar la clave de firma
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // 1. Generar Token (Cuando el usuario hace login)
+    // 1. Generar Token 
     public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role); // Guardamos el rol dentro del token
+        claims.put("role", role); 
         return createToken(claims, username);
     }
 
@@ -47,13 +45,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    // 2. Validar Token (Para cada petición)
+    // 2. Validar Token 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // Métodos auxiliares para leer el token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

@@ -15,15 +15,15 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String run;
 
-    private String firstName; // En frontend es firstName
-    private String lastName;  // En frontend es lastName
+    private String firstName; 
+    private String lastName;  
 
     @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
 
-    private String role; // "Administrador", "Cliente", "Vendedor"
+    private String role; 
 
     private String region;
     private String comuna;

@@ -40,19 +40,19 @@ public class OrderService {
         Usuario usuario = usuarioRepository.findByEmail(emailUsuario);
         if (usuario == null) throw new RuntimeException("Usuario no encontrado");
 
-        // 2. Crear la Boleta (Cabecera)
+        // 2. Crear la Boleta 
         Boleta boleta = new Boleta();
         boleta.setUsuario(usuario);
         boleta.setFecha(new Date());
-        boleta.setTotal(0); // Lo calculamos abajo
+        boleta.setTotal(0); 
         
-        // Guardamos la boleta primero para tener un ID
+        // Guardar la boleta 
         boleta = boletaRepository.save(boleta);
 
         int totalCompra = 0;
         List<DetalleBoleta> detalles = new ArrayList<>();
 
-        // 3. Procesar cada producto del carrito
+        // 3. Procesar producto del carrito
         for (OrderItemDto item : request.getItems()) {
             Producto producto = productoRepository.findByCode(item.getCode());
             
@@ -80,13 +80,13 @@ public class OrderService {
             detalleRepository.save(detalle);
             detalles.add(detalle);
 
-            // Sumar al total
+            // Sumar total
             totalCompra += (producto.getPrice() * item.getQty());
         }
 
         // 4. Actualizar el total final de la boleta
         boleta.setTotal(totalCompra);
-        boleta.setDetalles(detalles); // (Opcional, para devolverla completa)
+        boleta.setDetalles(detalles); 
         
         return boletaRepository.save(boleta);
     }

@@ -26,7 +26,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // 1. LOGIN (Devuelve el Token)
+    // 1. LOGIN 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
         String email = loginRequest.get("email");
@@ -35,7 +35,7 @@ public class AuthController {
         // Buscar usuario
         Usuario usuario = usuarioRepository.findByEmail(email);
 
-        // Validar contraseña (texto plano por ahora)
+        // Validar contraseña 
         if (usuario != null && usuario.getPassword().equals(password)) {
             // Generar Token
             String token = jwtUtil.generateToken(usuario.getEmail(), usuario.getRole());
@@ -50,15 +50,13 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
     }
 
-    // 2. REGISTRO (Crea usuario nuevo)
+    // 2. REGISTRO 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Usuario usuario) {
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             return ResponseEntity.badRequest().body("El email ya existe");
         }
-        
-        // Aquí podrías encriptar la clave: usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        
+         
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }

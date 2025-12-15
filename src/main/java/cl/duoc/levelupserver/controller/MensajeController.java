@@ -16,13 +16,13 @@ public class MensajeController {
     @Autowired
     private MensajeRepository repository;
 
-    // 1. Guardar mensaje (Público)
+    // 1. Guardar mensaje 
     @PostMapping
     public ResponseEntity<Mensaje> crear(@RequestBody Mensaje mensaje) {
         return ResponseEntity.ok(repository.save(mensaje));
     }
 
-    // 2. Listar mensajes (Admin)
+    // 2. Listar mensajes 
     @GetMapping
     public List<Mensaje> listar() {
         return repository.findAll();

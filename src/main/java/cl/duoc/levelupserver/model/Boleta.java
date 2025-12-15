@@ -17,12 +17,10 @@ public class Boleta {
     private Date fecha;
     private Integer total;
 
-    // Relación: Una boleta pertenece a UN usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    // Relación: Una boleta tiene MUCHOS detalles
     @OneToMany(mappedBy = "boleta", cascade = CascadeType.ALL)
     private List<DetalleBoleta> detalles;
 }

@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(usuario);
     }
 
-    // 3. Crear (Admin crea usuario)
+    // 3. Crear (Admin)
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
         if (repository.findByRun(usuario.getRun()) != null) {
@@ -55,7 +55,6 @@ public class UserController {
         existente.setComuna(usuario.getComuna());
         existente.setAddress(usuario.getAddress());
         
-        // Solo actualizamos contraseña si viene una nueva
         if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
             existente.setPassword(usuario.getPassword());
         }

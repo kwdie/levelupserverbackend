@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
 
-@Data  // Lombok crea los Getters y Setters solo
-@Entity // Esto le dice a Spring: "Crea una tabla con esto"
+@Data  
+@Entity 
 @Table(name = "productos")
 public class Producto {
 
@@ -14,21 +14,21 @@ public class Producto {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String code; // El código que usas en el front (ej: "JM001")
+    private String code; 
 
     private String name;
     
-    private String category; // "JM", "AC", etc.
+    private String category; 
     
     private Integer price;
     
     private Integer stock;
     
-    private String img; // Ruta de la imagen (ej: "img/foto.png")
+    private String img; 
 
-    @Column(length = 1000) // Para que quepan descripciones largas
-    private String description; // En tu front se llama "desc", lo adaptaremos
+    @Column(length = 1000) 
+    private String description; 
 
-    @ElementCollection // Esto crea una sub-tabla automática para la lista de detalles
+    @ElementCollection 
     private List<String> details;
 }
