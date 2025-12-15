@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
@@ -30,15 +32,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/api/products/**", "/api/messages/**").permitAll() 
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable()) // Necesario para que funcione el Login desde React
+                .authorizeHttpRequests(auth -> auth
+                        // 1. LO PÚBLICO: Login, Registro y ver productos
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+
+                        // 2. LO PRIVADO: Solo el ADMIN puede crear, editar o borrar
+                        .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+
+                        // 3. TODO LO DEMÁS: Requiere estar logueado
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults()); 
 
         return http.build();
     }
